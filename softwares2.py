@@ -26,6 +26,7 @@ def euiler(n):
             result+=1
     return result
 
+
 #Function that check if the number is prime
 def checkPrime(num):
     if (num == 2):
@@ -111,7 +112,7 @@ def prime():
     k = int(input("Please enter the amount of rounds you want: "))
     while (k == 0):
         k = int(input("Wrong amount of rounds please enter again: "))
-    
+
     pnum = 2**n - 1
     if pnum == 1:
         return pnum
@@ -125,7 +126,7 @@ def generatingKeys(p,a,n,k):
     while Akey > n | miller_rabin(Akey,k) == False | Bkey > n | miller_rabin(Bkey,k) == False:
         Akey = int(input("Wrong number, please enter again secret key for Alice: "))
         Bkey = int(input("Wrong number, please enter again secret key for Bob: "))
-    
+
     generatedkA = int(pow(a,Akey,p))   #Alice public key
     generatedkB = int(pow(a,Bkey,p))   #Bob public key
 
@@ -160,7 +161,7 @@ if __name__ == '__main__':
     print("The original message is:", message)
     cipherMessage = cipher(message, int(e), int(n))
     print("The cipher message is :" ,cipherMessage )
-    print("The message is : ", plain(cipherMessage, int(d),int(n))) 
+    print("The message is : ", plain(cipherMessage, int(d),int(n)))
     print("**********Second Question**********")
     p,a,n,k = prime()
     secret = generatingKeys(p,a,n,k)
