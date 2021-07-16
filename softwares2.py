@@ -1,4 +1,4 @@
-import random
+
 
 # Recursive function to return gcd of a and b
 def gcd(a,b):
@@ -26,7 +26,6 @@ def euiler(n):
             result+=1
     return result
 
-
 #Function that check if the number is prime
 def checkPrime(num):
     if (num == 2):
@@ -46,12 +45,12 @@ def calkey(p,q):
     if gcd(phlcm, e) != 1:
         print("Error in calculating keys")
     else:
-        #print("i am lcm:" , phlcm)
+        
         gcd1,x,y  = egcd(e, phlcm)
-        print("i am y:", y)
-        print("i am x:", x)
+        # print("i am y:", y)
+        # print("i am x:", x)
         d = int(x)
-        #print("i am d:", d)
+        
     return e,d
 
 
@@ -94,7 +93,9 @@ def miller_rabin(n, k):
         r += 1
         s //= 2
     for _ in range(k):
-        a = random.randrange(2, n - 1)
+        #a = random.randrange(2, n - 1)
+        a = rand(2, n - 1)
+        
         x = pow(a, s, n)
         if x == 1 or x == n - 1:
             continue
@@ -106,64 +107,88 @@ def miller_rabin(n, k):
             return False
     return True
 
+### random
+def rand(min,max):
+    A = min; # any number in (0, RAND_MAX)
+    C = max; # any number in [0, RAND_MAX)
+    RAND_MAX = 100000
+
+    prev = 0; #seed. any number in [0, RAND_MAX)
+    prev = ( prev * A + C ) % RAND_MAX
+    return int(prev)
+
+
+
 def prime():
     a = 2
-    n = int(input("Please enter the amount of bit size you want: "))
-    k = int(input("Please enter the amount of rounds you want: "))
+    # n = int(input("Please enter the amount of bit size you want: "))
+    # k = int(input("Please enter the amount of rounds you want: "))
+    n = 5 
+    k = 5
     while (k == 0):
         k = int(input("Wrong amount of rounds please enter again: "))
-
+    
     pnum = 2**n - 1
     if pnum == 1:
         return pnum
     while miller_rabin(pnum,k) == False:
             pnum = pnum - 2
+    print("Prime number", pnum)
     return pnum,a,n,k
 
 def generatingKeys(p,a,n,k):
-    Akey = int(input("Please enter the public key you want for Alice: "))   #Alice secret number
-    Bkey = int(input("Please enter the public key you want for Bob: "))     #Bob secret number
+    # Akey = int(input("Please enter the public key you want for Alice: "))   #Alice secret number
+    # Bkey = int(input("Please enter the public key you want for Bob: "))     #Bob secret number
+    Akey = 7
+    Bkey = 3
     while Akey > n | miller_rabin(Akey,k) == False | Bkey > n | miller_rabin(Bkey,k) == False:
         Akey = int(input("Wrong number, please enter again secret key for Alice: "))
         Bkey = int(input("Wrong number, please enter again secret key for Bob: "))
-
+    
     generatedkA = int(pow(a,Akey,p))   #Alice public key
     generatedkB = int(pow(a,Bkey,p))   #Bob public key
 
     print("Alice public key : ", Akey)
     print("Bob public key : ", Bkey)
 
-    secretK = int(pow(Bkey,Akey,p))
+    print("Alice secret key : ",  generatedkA)
+    print("Bob secret key : ", generatedkB)
+
+    secretK = int(pow(a,Bkey*Akey,p))
     return secretK
 
 
 
 if __name__ == '__main__':
     print("**********First Question**********")
-    size = int(input("Please enter the size of the key you want: "))
-    p = int(input("Please enter the first prime number: "))
-    q = int(input("Please enter the second prime numbers: "))
-    while checkPrime(p) == False or checkPrime(q) == False:
-        p = int(input("The numbers you entered not prime, please enter again the first prime: "))
-        q = int(input("Please enter the second prime: "))
+    # size = int(input("Please enter the size of the key you want: "))
+    # p = int(input("Please enter the first prime number: "))
+    # q = int(input("Please enter the second prime numbers: "))
+    # while checkPrime(p) == False or checkPrime(q) == False:
+    #     p = int(input("The numbers you entered not prime, please enter again the first prime: "))
+    #     q = int(input("Please enter the second prime: "))
+    size = 4
+    p = 31
+    q = 37
     n = p*q
     count=0
-    while(n>0):
-        count=count+1
-        n=n//10
-    while count != size:
-        size = int(input("Wrong key size, please enter size again: "))
-    n=p*q
+    # while(n>0):
+    #     count=count+1
+    #     n=n//10
+    # while count != size:
+    #     size = int(input("Wrong key size, please enter size again: "))
+    # n=p*q
     e,d = calkey(p, q)
     print("The private key is: (" + str(n) + "," + str(e) + "," + str(int(d)) + ")")
     print("The public key is: (" + str(n) + "," + str(e) + ")")
-    message = int(input("Please enter the message you want to encript"))
+    # message = int(input("Please enter the message you want to encript"))
+    message = 37
     print("The original message is:", message)
     cipherMessage = cipher(message, int(e), int(n))
     print("The cipher message is :" ,cipherMessage )
-    print("The message is : ", plain(cipherMessage, int(d),int(n)))
+    print("The message is : ", plain(cipherMessage, int(d),int(n))) 
     print("**********Second Question**********")
     p,a,n,k = prime()
     secret = generatingKeys(p,a,n,k)
-    print("The generatingsecter key is: ", secret)
+    print("The generating secret key is: ", secret)
 
